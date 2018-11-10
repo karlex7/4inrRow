@@ -248,8 +248,6 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void UcitajBoardOdArray() {
-        //grid
-        printBoard();
         for (int i = 0; i < COLUMNS; i++) {
             for (int j = ROWS-1; j >0; j--) {
                 if (trenutniGame[i][j]==1) {
