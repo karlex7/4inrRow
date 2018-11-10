@@ -5,11 +5,19 @@
  */
 package pkg4inrow;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -43,6 +51,7 @@ public class FXMLDocumentController implements Initializable {
     private static boolean winnerOnce=true;//Prikazuje mi winnera 2 puta, ovo je fix
     private static int rPoints=0;
     private static int yPoints=0;
+    private final String fileName="Board.dat";
        
     @FXML
     private Pane pane;
@@ -56,6 +65,8 @@ public class FXMLDocumentController implements Initializable {
     private Button saveBtnID;
     @FXML
     private Button loadBtnID;
+    @FXML
+    private Button resetBtnID;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -190,29 +201,77 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void printBoard() {
-        for (int i = 0; i < trenutniGame.length; i++) {
-            for (int j = 0; j < trenutniGame.length-1; j++) {
+        for (int i = 0; i < COLUMNS; i++) {
+            for (int j = 0; j < ROWS; j++) {
                 System.out.print(trenutniGame[i][j]);
             }
             System.out.println("");
         }
-        System.out.println("-------------");
-        for (int i = 0; i < trenutniGame.length-1; i++) {
-            for (int j = 0; j < trenutniGame.length; j++) {
-                System.out.print(trenutniGame[j][i]);
-            }
-            System.out.println("");
-        }
-    
     }
 
     @FXML
-    private void OnClickSave(ActionEvent event) {
+    private void OnClickSave(ActionEvent event){
+        //SERIJALIZACIJA
+        try{
+        FileOutputStream file=new FileOutputStream(fileName);
+        ObjectOutputStream out=new ObjectOutputStream(file);
+        out.writeObject(trenutniGame);
+        printBoard();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-        //Napraviti serijalizaciju
 
     @FXML
     private void OnClickLoad(ActionEvent event) {
+        //DESERIJALIZACIJA
+        try{
+            int[][] ucitaniBoard=null;
+            FileInputStream  file=new FileInputStream(fileName);
+            ObjectInputStream in=new ObjectInputStream(file);
+            ucitaniBoard = (int[][]) in.readObject();
+            trenutniGame=ucitaniBoard;
+            UcitajBoardOdArray();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void onClickReset(ActionEvent event) {
+        ResetBoard();
+    }
+
+    private void UcitajBoardOdArray() {
+        //grid
+        printBoard();
+        for (int i = 0; i < COLUMNS; i++) {
+            for (int j = ROWS-1; j >0; j--) {
+                if (trenutniGame[i][j]==1) {
+                    Circle circle=new Circle((TITLE_SIZE/2));
+                    circle.setCenterX(TITLE_SIZE/2);
+                    circle.setCenterY(TITLE_SIZE/2);
+                    circle.setFill(Color.RED);
+                    grid.add(circle,i,discGrid[i]);
+                    discGrid[i]--;
+                    
+                }
+                if (trenutniGame[i][j]==2) {
+                    Circle circle=new Circle((TITLE_SIZE/2));
+                    circle.setCenterX(TITLE_SIZE/2);
+                    circle.setCenterY(TITLE_SIZE/2);
+                    circle.setFill(Color.YELLOW);
+                    grid.add(circle,i,discGrid[i]);
+                    discGrid[i]--;
+                }
+            }
+        }
+        
     }
     
     }
