@@ -7,13 +7,16 @@ package pkg4inrow;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -49,6 +52,10 @@ public class FXMLDocumentController implements Initializable {
     private Label redPoints;
     @FXML
     private Label yellowPoints;
+    @FXML
+    private Button saveBtnID;
+    @FXML
+    private Button loadBtnID;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -87,7 +94,7 @@ public class FXMLDocumentController implements Initializable {
                 @Override
                 public void handle(MouseEvent e) {
                     placeDisc(column);
-                    //checkIfWinner(x,discGrid[x]); Provjeriti tu
+                    //checkIfWinner(column,discGrid[x]);
                 }
             });
             list.add(rect);
@@ -122,6 +129,7 @@ public class FXMLDocumentController implements Initializable {
                 }
             
             checkIfWinner(x,discGrid[x]);
+            
             }
         }
 
@@ -145,10 +153,12 @@ public class FXMLDocumentController implements Initializable {
         
         winnerOnce=true;
         
+        
     }
    
     private void printWinner(int boja) {
         if (winnerOnce) {
+            printBoard();
             ResetBoard();
         System.out.println("Winner");
         if (boja==1) {
@@ -170,10 +180,6 @@ public class FXMLDocumentController implements Initializable {
     private void ResetBoard() {
         grid.getChildren().clear();
         Draw();
-        //Ciscenje polja za crtanje
-        /**for (int i = 0; i < discGrid.length; i++) {
-            discGrid[i]=5;
-        }**/
         NapuniDiscGrid();
         //ciscenje polja za prvikaz igre
         for (int i = 0; i < 6; i++) {
@@ -182,8 +188,32 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
+
+    private void printBoard() {
+        for (int i = 0; i < trenutniGame.length; i++) {
+            for (int j = 0; j < trenutniGame.length-1; j++) {
+                System.out.print(trenutniGame[i][j]);
+            }
+            System.out.println("");
+        }
+        System.out.println("-------------");
+        for (int i = 0; i < trenutniGame.length-1; i++) {
+            for (int j = 0; j < trenutniGame.length; j++) {
+                System.out.print(trenutniGame[j][i]);
+            }
+            System.out.println("");
+        }
     
-    
+    }
+
+    @FXML
+    private void OnClickSave(ActionEvent event) {
+    }
+        //Napraviti serijalizaciju
+
+    @FXML
+    private void OnClickLoad(ActionEvent event) {
+    }
     
     }
 
