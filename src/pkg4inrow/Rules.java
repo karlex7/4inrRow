@@ -39,15 +39,6 @@ public class Rules {
     }
     
     boolean checkIfWinner() {
-        //System.out.println("RULES");
-        //System.out.println(x);
-        //System.out.println(y);
-        
-        //checkColumns(x,y);
-        //checkRows(x,y);
-        //checkDiagonalLeft(x,y);
-        //checkDiagonalRight(x,y);
-        
         if (checkColumns(x,y)||checkRows(x,y)||checkDiagonalLeft(x,y)||checkDiagonalRight(x,y)) {
             return true;
         }
