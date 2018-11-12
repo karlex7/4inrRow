@@ -6,6 +6,7 @@
 package pkg4inrow;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,16 +33,20 @@ public class Reflection {
         System.out.println("Class name: "+cls.getName());
         try {
             Constructor c=cls.getConstructor();
-            System.out.println("Constructor name: "+ c.getName());
+            System.out.println("\nConstructor name: "+ c.getName());
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Method[] m=cls.getMethods();
-        System.out.println("Imena metoda: ");
+        Method[] m=cls.getDeclaredMethods();
+        System.out.println("\nImena metoda: ");
         for (Method method : m) {
             System.out.println(method.getName());
         }
-        
+        System.out.println("\nImena fieldova:");
+        Field[] fields=cls.getFields();
+        for (Field field : fields) {
+            System.out.println(field.getName());
+        }
     }
 
     private void IspisRules() {
@@ -52,14 +57,20 @@ public class Reflection {
         System.out.println("Class name: "+cls.getName());
         try {
             Constructor c=cls.getConstructor();
-            System.out.println("Constructor name: "+ c.getName());
+            System.out.println("\nConstructor name: "+ c.getName());
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Method[] m=cls.getMethods();
-        System.out.println("Imena metoda: ");
+        Method[] m=cls.getDeclaredMethods();
+        System.out.println("\nImena metoda: ");
         for (Method method : m) {
             System.out.println(method.getName());
         }
+        System.out.println("\nImena fieldova:");
+        Field[] fields=cls.getFields();
+        for (Field field : fields) {
+            System.out.println(field.getName());
+        }
+
     }
 }
