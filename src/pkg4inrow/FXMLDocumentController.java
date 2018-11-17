@@ -216,7 +216,7 @@ public class FXMLDocumentController implements Initializable {
         FileOutputStream file=new FileOutputStream(fileName);
         ObjectOutputStream out=new ObjectOutputStream(file);
         out.writeObject(trenutniGame);
-        //printBoard();
+        printBoard();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -249,7 +249,7 @@ public class FXMLDocumentController implements Initializable {
 
     private void UcitajBoardOdArray() {
         for (int i = 0; i < COLUMNS; i++) {
-            for (int j = ROWS-1; j >0; j--) {
+            for (int j = ROWS-1; j >=0; j--) {
                 if (trenutniGame[i][j]==1) {
                     Circle circle=new Circle((TITLE_SIZE/2));
                     circle.setCenterX(TITLE_SIZE/2);
