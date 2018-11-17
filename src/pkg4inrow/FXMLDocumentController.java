@@ -152,9 +152,9 @@ public class FXMLDocumentController implements Initializable {
 
     private void checkIfWinner(int x, int y) {
         y++;
-        System.out.println("MAIN");
-        System.out.println(x);
-        System.out.println(y);
+        //System.out.println("MAIN");
+        //System.out.println(x);
+        //System.out.println(y);
         
         Rules r=new Rules(winnerOnce,rPoints,yPoints,redPoints,yellowPoints,trenutniGame,x,y);
         
@@ -216,7 +216,7 @@ public class FXMLDocumentController implements Initializable {
         FileOutputStream file=new FileOutputStream(fileName);
         ObjectOutputStream out=new ObjectOutputStream(file);
         out.writeObject(trenutniGame);
-        printBoard();
+        //printBoard();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
