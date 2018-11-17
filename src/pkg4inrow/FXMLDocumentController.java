@@ -212,34 +212,24 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void OnClickSave(ActionEvent event){
         //SERIJALIZACIJA
-        try{
-        FileOutputStream file=new FileOutputStream(fileName);
-        ObjectOutputStream out=new ObjectOutputStream(file);
-        out.writeObject(trenutniGame);
-        printBoard();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Serialization s=new Serialization();
+        s.SaveBoard(trenutniGame);
+        s.SavePlayer(redMove);
+        s.SaveScore(rPoints, yPoints);
     }
 
     @FXML
     private void OnClickLoad(ActionEvent event) {
         //DESERIJALIZACIJA
-        try{
-            int[][] ucitaniBoard=null;
-            FileInputStream  file=new FileInputStream(fileName);
-            ObjectInputStream in=new ObjectInputStream(file);
-            ucitaniBoard = (int[][]) in.readObject();
-            trenutniGame=ucitaniBoard;
-            UcitajBoardOdArray();
-            
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       Serialization s=new Serialization();
+       trenutniGame=s.LoadBoard();
+       redMove=s.LoadPlayer();
+       int[] score=s.LoadScore();
+       rPoints=score[0];
+       yPoints=score[1];
+       UcitajBoardOdArray();
+       redPoints.setText(Integer.toString(rPoints));
+       yellowPoints.setText(Integer.toString(yPoints));
     }
 
     @FXML
