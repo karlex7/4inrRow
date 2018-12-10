@@ -43,7 +43,7 @@ public class Reflection {
             System.out.println(method.getName());
         }
         System.out.println("\nImena fieldova:");
-        Field[] fields=cls.getFields();
+        Field[] fields=cls.getDeclaredFields();
         for (Field field : fields) {
             System.out.println(field.getName());
         }
@@ -67,7 +67,7 @@ public class Reflection {
             System.out.println(method.getName());
         }
         System.out.println("\nImena fieldova:");
-        Field[] fields=cls.getFields();
+        Field[] fields=cls.getDeclaredFields();
         for (Field field : fields) {
             System.out.println(field.getName());
         }

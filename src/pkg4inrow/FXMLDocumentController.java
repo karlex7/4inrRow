@@ -5,19 +5,10 @@
  */
 package pkg4inrow;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -27,6 +18,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -52,6 +45,9 @@ public class FXMLDocumentController implements Initializable {
     private static int rPoints=0;
     private static int yPoints=0;
     private final String fileName="Board.dat";
+    private int moveCount=0;
+    TimeCounter ThreadRed=new TimeCounter("ThreadRed",this, true);
+    TimeCounter ThreadYellow=new TimeCounter("ThreadYellow",this,false);
        
     @FXML
     private Pane pane;
@@ -67,6 +63,11 @@ public class FXMLDocumentController implements Initializable {
     private Button loadBtnID;
     @FXML
     private Button resetBtnID;
+    ProgressBar progressBarID;
+    @FXML
+    private Label timeLeftRed;
+    @FXML
+    private Label timeLeftYellow;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -129,6 +130,8 @@ public class FXMLDocumentController implements Initializable {
                 grid.add(circle,x,discGrid[x]);
                 redMove=false;
                 trenutniGame[x][discGrid[x]--]=1;
+                pauzirajT1();
+                
             }else{
                 Circle circle=new Circle((TITLE_SIZE/2));
                 circle.setCenterX(TITLE_SIZE/2);
@@ -137,11 +140,13 @@ public class FXMLDocumentController implements Initializable {
                 grid.add(circle,x,discGrid[x]);
                 redMove=true;
                 trenutniGame[x][discGrid[x]--]=2;
+                pauzirajT2();
                 }
-            
-            checkIfWinner(x,discGrid[x]);
-            
+        checkIfWinner(x,discGrid[x]);
+        moveCount++;
+        
             }
+        
         }
 
     private void NapuniDiscGrid() {
@@ -160,6 +165,7 @@ public class FXMLDocumentController implements Initializable {
         
         if (r.checkIfWinner()) {
             printWinner(trenutniGame[x][y]);
+            
         }
         
         winnerOnce=true;
@@ -167,7 +173,7 @@ public class FXMLDocumentController implements Initializable {
         
     }
    
-    private void printWinner(int boja) {
+    public void printWinner(int boja) {
         if (winnerOnce) {
             printBoard();
             ResetBoard();
@@ -192,12 +198,18 @@ public class FXMLDocumentController implements Initializable {
         grid.getChildren().clear();
         Draw();
         NapuniDiscGrid();
+        ThreadRed.t.suspend();
+        ThreadYellow.t.suspend();
+        timeLeftRed.setText(Integer.toString(ThreadRed.TIME));
+        timeLeftYellow.setText(Integer.toString(ThreadYellow.TIME));
+        
         //ciscenje polja za prvikaz igre
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 trenutniGame[i][j]=0;
             }
         }
+        
     }
 
     private void printBoard() {
@@ -212,24 +224,24 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void OnClickSave(ActionEvent event){
         //SERIJALIZACIJA
-        Serialization s=new Serialization();
-        s.SaveBoard(trenutniGame);
-        s.SavePlayer(redMove);
-        s.SaveScore(rPoints, yPoints);
+        Stanje s=new Stanje(trenutniGame,redMove,rPoints,yPoints);
+        s.save(s);
     }
 
     @FXML
     private void OnClickLoad(ActionEvent event) {
         //DESERIJALIZACIJA
-       Serialization s=new Serialization();
-       trenutniGame=s.LoadBoard();
-       redMove=s.LoadPlayer();
-       int[] score=s.LoadScore();
-       rPoints=score[0];
-       yPoints=score[1];
+        ResetBoard();
+        Stanje s=new Stanje();
+        s=s.load();
+       trenutniGame=s.board;
+       redMove=s.player;
+       rPoints=s.score1;
+       yPoints=s.score2;
+       yellowPoints.setText(Integer.toString(yPoints));
+       //printBoard();
        UcitajBoardOdArray();
        redPoints.setText(Integer.toString(rPoints));
-       yellowPoints.setText(Integer.toString(yPoints));
     }
 
     @FXML
@@ -240,7 +252,7 @@ public class FXMLDocumentController implements Initializable {
     private void UcitajBoardOdArray() {
         for (int i = 0; i < COLUMNS; i++) {
             for (int j = ROWS-1; j >=0; j--) {
-                if (trenutniGame[i][j]==1) {
+                if (trenutniGame[i][j]==1) {//GRESKA
                     Circle circle=new Circle((TITLE_SIZE/2));
                     circle.setCenterX(TITLE_SIZE/2);
                     circle.setCenterY(TITLE_SIZE/2);
@@ -261,6 +273,26 @@ public class FXMLDocumentController implements Initializable {
         }
         
     }
+
+    private void pauzirajT1() {
+        ThreadYellow.t.resume();
+        ThreadRed.t.suspend();
+        System.out.println("Main: " +ThreadYellow.counter);
+    }
+
+    private void pauzirajT2() {
+        ThreadRed.t.resume();
+        ThreadYellow.t.suspend();
+        System.out.println("Main: " +ThreadRed.counter);
+    }
+    public void setLabelTextRed(int broj){
+        timeLeftRed.setText(Integer.toString(broj));
+    }
+    public void setLabelTextYellow(int broj){
+        timeLeftYellow.setText(Integer.toString(broj));
+    }
+
+    
     
     }
 

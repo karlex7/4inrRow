@@ -27,6 +27,7 @@ public class Rules {
     int y;
     
     
+    
     public Rules(boolean winnerOnce,int rPoints,int yPoints,Label redPoints,Label yellowPoints,int [][] trenutniGame,int X,int Y){
         this.winnerOnce=winnerOnce;
         rPoints=this.rPoints=rPoints;
@@ -36,6 +37,9 @@ public class Rules {
         this.trenutniGame=trenutniGame;
         this.x=X;
         this.y=Y;
+    }
+    public Rules(){
+        
     }
     
     boolean checkIfWinner() {

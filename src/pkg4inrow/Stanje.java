@@ -21,7 +21,7 @@ public class Stanje {
             
         }
         public void save(Stanje stanje) {
-            Serialization s=new Serialization();
+        Serialization s=new Serialization();
         s.SaveBoard(stanje.board);
         s.SavePlayer(stanje.player);
         s.SaveScore(stanje.score1,stanje.score2);
