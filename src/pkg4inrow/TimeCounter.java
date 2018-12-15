@@ -36,6 +36,7 @@ public class TimeCounter implements Runnable {
         con=controller;
         moveRed=redMove;
     }
+    //wait, notify -> na klik gumb, startati threadove na pocetku i pauzirati, kilati threadove na kraju
 
     @Override
     public void run() {
