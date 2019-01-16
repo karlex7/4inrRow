@@ -46,8 +46,9 @@ public class FXMLDocumentController implements Initializable {
     private static int yPoints=0;
     private final String fileName="Board.dat";
     private int moveCount=0;
-    TimeCounter ThreadRed=new TimeCounter("ThreadRed",this, true);
-    TimeCounter ThreadYellow=new TimeCounter("ThreadYellow",this,false);
+    //TimeCounter ThreadRed=new TimeCounter("ThreadRed",this, true);
+    //TimeCounter ThreadYellow=new TimeCounter("ThreadYellow",this,false);
+    TimeCounter ThreadCounter=new TimeCounter(this);
        
     @FXML
     private Pane pane;
@@ -66,8 +67,6 @@ public class FXMLDocumentController implements Initializable {
     ProgressBar progressBarID;
     @FXML
     private Label timeLeftRed;
-    @FXML
-    private Label timeLeftYellow;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -157,14 +156,10 @@ public class FXMLDocumentController implements Initializable {
 
     private void checkIfWinner(int x, int y) {
         y++;
-        //System.out.println("MAIN");
-        //System.out.println(x);
-        //System.out.println(y);
-        
         Rules r=new Rules(winnerOnce,rPoints,yPoints,redPoints,yellowPoints,trenutniGame,x,y);
         
         if (r.checkIfWinner()) {
-            printWinner(trenutniGame[x][y]);
+            printWinner(redMove);
             
         }
         
@@ -173,12 +168,12 @@ public class FXMLDocumentController implements Initializable {
         
     }
    
-    public void printWinner(int boja) {
+    public void printWinner(boolean redMove) {
         if (winnerOnce) {
-            printBoard();
+            //printBoard();
             ResetBoard();
         System.out.println("Winner");
-        if (boja==1) {
+        if (redMove==false) {
         Alert alert = new Alert(AlertType.INFORMATION, "THE WINNER IS RED!", ButtonType.OK);
         alert.show();
         rPoints++;
@@ -198,10 +193,9 @@ public class FXMLDocumentController implements Initializable {
         grid.getChildren().clear();
         Draw();
         NapuniDiscGrid();
-        ThreadRed.t.suspend();
-        ThreadYellow.t.suspend();
-        timeLeftRed.setText(Integer.toString(ThreadRed.TIME));
-        timeLeftYellow.setText(Integer.toString(ThreadYellow.TIME));
+        ThreadCounter.stop();
+        moveCount=0;
+        timeLeftRed.setText(Integer.toString(ThreadCounter.TIME));
         
         //ciscenje polja za prvikaz igre
         for (int i = 0; i < 6; i++) {
@@ -275,23 +269,27 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void pauzirajT1() {
-        ThreadYellow.t.resume();
-        ThreadRed.t.suspend();
-        System.out.println("Main: " +ThreadYellow.counter);
+        if (moveCount==0) {
+            ThreadCounter.start();
+        }
+        ThreadCounter.restart();
+        timeLeftRed.setTextFill(Color.YELLOW);
     }
 
     private void pauzirajT2() {
-        ThreadRed.t.resume();
-        ThreadYellow.t.suspend();
-        System.out.println("Main: " +ThreadRed.counter);
+        if (moveCount==0) {
+            ThreadCounter.start();
+        }
+        ThreadCounter.restart();
+        timeLeftRed.setTextFill(Color.RED);
+        
     }
     public void setLabelTextRed(int broj){
         timeLeftRed.setText(Integer.toString(broj));
     }
-    public void setLabelTextYellow(int broj){
-        timeLeftYellow.setText(Integer.toString(broj));
+    private void callWinner(){
+        printWinner(redMove);
     }
-
     
     
     }
