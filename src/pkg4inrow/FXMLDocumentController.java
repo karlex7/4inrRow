@@ -170,21 +170,21 @@ public class FXMLDocumentController implements Initializable {
    
     public void printWinner(boolean redMove) {
         if (winnerOnce) {
-            //printBoard();
-            ResetBoard();
-        System.out.println("Winner");
-        if (redMove==false) {
-        Alert alert = new Alert(AlertType.INFORMATION, "THE WINNER IS RED!", ButtonType.OK);
-        alert.show();
-        rPoints++;
-        redPoints.setText(Integer.toString(rPoints));
-        }else{
+        if (redMove) {
         Alert alert = new Alert(AlertType.INFORMATION, "THE WINNER IS YELLOW!", ButtonType.OK);
         alert.show();
         yPoints++;
         yellowPoints.setText(Integer.toString(yPoints));
+        }else{
+        Alert alert = new Alert(AlertType.INFORMATION, "THE WINNER IS RED!", ButtonType.OK);
+        alert.show();
+        rPoints++;
+        redPoints.setText(Integer.toString(rPoints));
         }
         winnerOnce=false;
+        ResetBoard();
+        ThreadCounter.reset();
+        ThreadCounter.NotPause=false;
         }
         
     }
@@ -193,7 +193,7 @@ public class FXMLDocumentController implements Initializable {
         grid.getChildren().clear();
         Draw();
         NapuniDiscGrid();
-        ThreadCounter.stop();
+        //ThreadCounter.stop();
         moveCount=0;
         timeLeftRed.setText(Integer.toString(ThreadCounter.TIME));
         
@@ -269,25 +269,26 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void pauzirajT1() {
-        if (moveCount==0) {
-            ThreadCounter.start();
-        }
-        ThreadCounter.restart();
+        ThreadCounter.NotPause=true;
+        ThreadCounter.reset();
         timeLeftRed.setTextFill(Color.YELLOW);
     }
 
     private void pauzirajT2() {
-        if (moveCount==0) {
-            ThreadCounter.start();
-        }
-        ThreadCounter.restart();
+        ThreadCounter.NotPause=true;
+        ThreadCounter.reset();
         timeLeftRed.setTextFill(Color.RED);
         
     }
     public void setLabelTextRed(int broj){
         timeLeftRed.setText(Integer.toString(broj));
+        if (broj==0) {
+            callWinner();
+        }
     }
-    private void callWinner(){
+    public void callWinner(){
+        System.out.println("Winner");
+        winnerOnce=true;
         printWinner(redMove);
     }
     
