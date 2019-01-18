@@ -11,7 +11,7 @@ public class TimeCounter implements Runnable {
     public int counter;
     public int TIME=5;
     FXMLDocumentController con;
-    boolean NotPause=false;
+    boolean NotPause=false; //pazuza zbog prvog poteza
     
     public TimeCounter(FXMLDocumentController controller){
         t=new Thread(this);
@@ -23,43 +23,27 @@ public class TimeCounter implements Runnable {
     @Override
     public void run() {
         try{
-            while (counter>=-2) {
-                //System.out.println("Time counter: "+counter);
-                if (NotPause) {
+            while (true) {
+                
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             con.setLabelTextRed(counter);
-                            counter--;
+                            if (NotPause) {
+                                counter--;
+                            }
                         }
                     });
-                }
-                
                 Thread.sleep(1000);
-                if (counter==0) {
-                callWinner();
-                NotPause=false;
-                }
             }
         }catch(Exception e){
             
         }
     }
-    
-    void start(){
-        NotPause=true;
-    }
-    void restart(){
+    void reset(){
         counter=TIME;
-        start();
-    }
-    void stop(){
-        NotPause=false;
     }
     
-    void callWinner(){
-        con.callWinner(); //call
-    }
    
     
     
