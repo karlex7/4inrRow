@@ -52,11 +52,7 @@
       <Button fx:id="saveBtnID" layoutX="240.0" layoutY="639.0" mnemonicParsing="false" onAction="#OnClickSave" text="Save" />
       <Button fx:id="loadBtnID" layoutX="408.0" layoutY="639.0" mnemonicParsing="false" onAction="#OnClickLoad" text="Load" />
       <Button fx:id="resetBtnID" layoutX="324.0" layoutY="639.0" mnemonicParsing="false" onAction="#onClickReset" text="Reset" />
-      <Label fx:id="timeLeftRed" layoutX="34.0" layoutY="609.0" text="0" textFill="RED">
-         <font>
-            <Font size="18.0" />
-         </font></Label>
-      <Label fx:id="timeLeftYellow" layoutX="631.0" layoutY="608.0" text="0" textFill="#eeff00">
+      <Label fx:id="timeLeftRed" layoutX="341.0" layoutY="608.0" text="0" textFill="RED">
          <font>
             <Font size="18.0" />
          </font></Label>
