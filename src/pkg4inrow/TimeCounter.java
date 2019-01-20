@@ -43,9 +43,8 @@ public class TimeCounter implements Runnable {
     void reset(){
         counter=TIME;
     }
-    
-   
-    
-    
+    public void ChangeTime(int time){
+        TIME=time;
+    }
 }
     

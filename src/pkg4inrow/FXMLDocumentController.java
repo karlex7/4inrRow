@@ -5,21 +5,26 @@
  */
 package pkg4inrow;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -27,6 +32,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.stage.Stage;
 
 /**
  *
@@ -37,7 +43,7 @@ public class FXMLDocumentController implements Initializable {
     private static final int COLUMNS=7;
     private static final int ROWS=6;
     private static final int WIDTH=700;
-    private static final int HEIGHT=700;
+    private static final int HEIGHT=750;
     private static boolean redMove=true;
     private int[] discGrid=new int[COLUMNS];//Tu stavljam kolko je popunjenih mjesta u redovima
     private int[][] trenutniGame=new int[COLUMNS][ROWS];//Prikaz trenutnog boarda sa bojama 1=RED, 2=YELLOW
@@ -46,9 +52,8 @@ public class FXMLDocumentController implements Initializable {
     private static int yPoints=0;
     private final String fileName="Board.dat";
     private int moveCount=0;
-    //TimeCounter ThreadRed=new TimeCounter("ThreadRed",this, true);
-    //TimeCounter ThreadYellow=new TimeCounter("ThreadYellow",this,false);
     TimeCounter ThreadCounter=new TimeCounter(this);
+    Settings settings=new Settings();
        
     @FXML
     private Pane pane;
@@ -67,6 +72,14 @@ public class FXMLDocumentController implements Initializable {
     ProgressBar progressBarID;
     @FXML
     private Label timeLeftRed;
+    @FXML
+    private Button btnSettings;
+    @FXML
+    private Button btnFastGame;
+    @FXML
+    private Button btnStandardGame;
+    @FXML
+    private Button btnSlowGame;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -105,7 +118,6 @@ public class FXMLDocumentController implements Initializable {
                 @Override
                 public void handle(MouseEvent e) {
                     placeDisc(column);
-                    //checkIfWinner(column,discGrid[x]);
                 }
             });
             list.add(rect);
@@ -193,8 +205,8 @@ public class FXMLDocumentController implements Initializable {
         grid.getChildren().clear();
         Draw();
         NapuniDiscGrid();
-        //ThreadCounter.stop();
         moveCount=0;
+        ThreadCounter.NotPause=false;
         timeLeftRed.setText(Integer.toString(ThreadCounter.TIME));
         
         //ciscenje polja za prvikaz igre
@@ -290,6 +302,35 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("Winner");
         winnerOnce=true;
         printWinner(redMove);
+    }
+
+    @FXML
+    private void OnClickBtnSettings(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void OnClickBtnFastGame(ActionEvent event) {
+        
+        ThreadCounter.TIME=settings.GetFastTime();
+    }
+
+    @FXML
+    private void OnClickBtnStandardGame(ActionEvent event) {
+        ThreadCounter.TIME=settings.GetStandardTime();
+    }
+
+    @FXML
+    private void OnClickBtnSlowGame(ActionEvent event) {
+        ThreadCounter.TIME=settings.GetSlowTime();
     }
     
     
