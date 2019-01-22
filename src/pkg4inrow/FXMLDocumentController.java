@@ -334,29 +334,30 @@ public class FXMLDocumentController implements Initializable {
             btnSendServer.setVisible(false);
         }
     }
-
+    public void setTextInTextArea(String msg){
+        String temp=txtChatArea.getText();
+        temp=temp+"\n"+msg;
+        txtChatArea.setText(temp);
+    }
     @FXML
     private void OnClickBtnSendServer(ActionEvent event) throws RemoteException {
         String msg=txtMessage.getText();
         txtMessage.clear();
+        setTextInTextArea("Klijent: "+msg);
         server.sendMessage(msg);
         List<String> list=server.getAllMessages();
-        System.out.println("************");
-        for (String s : list) {
-            System.out.println(s);
-        }
     }
 
     @FXML
     private void OnClickBtnSednClient(ActionEvent event) throws RemoteException {
         String msg=txtMessage.getText();
         txtMessage.clear();
+        setTextInTextArea("Server: "+msg);
         client.sendMessage(msg);
         List<String> list=client.getAllMessages();
     }
-    public void setTextInTextArea(String msg){
-        txtChatArea.setText(msg);
-    }
+    
+    
     
     
     }

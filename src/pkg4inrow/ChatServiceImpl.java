@@ -29,7 +29,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void send(String message) throws RemoteException {
         System.out.println("Ovo javlja "+name);
-        String temp=message;
+        String temp=name+": "+message;
         System.out.println(temp);
         messages.add(temp);
         con.setTextInTextArea(temp);
