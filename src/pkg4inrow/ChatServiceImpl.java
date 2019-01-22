@@ -26,7 +26,8 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void send(String message) throws RemoteException {
-        String temp=name+": "+message;
+        System.out.println("Ovo javlja "+name);
+        String temp=message;
         System.out.println(temp);
         messages.add(temp);
     }

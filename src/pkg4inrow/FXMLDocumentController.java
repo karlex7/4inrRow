@@ -341,9 +341,9 @@ public class FXMLDocumentController implements Initializable {
         txtMessage.clear();
         server.sendMessage(msg);
         List<String> list=server.getAllMessages();
+        System.out.println("************");
         for (String s : list) {
-            //System.out.println(s);
-            txtChatArea.setText(s);
+            System.out.println(s);
         }
     }
 
@@ -353,10 +353,6 @@ public class FXMLDocumentController implements Initializable {
         txtMessage.clear();
         client.sendMessage(msg);
         List<String> list=client.getAllMessages();
-        for (String s : list) {
-            //System.out.println(s);
-            txtChatArea.setText(s);
-        }
     }
     
     

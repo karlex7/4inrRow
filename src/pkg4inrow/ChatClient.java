@@ -7,7 +7,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +17,8 @@ public class ChatClient {
     ChatServiceImpl chat;
     Registry registry;
     ChatService stub;
-    List<String> messages;
+    List<String> messages=new ArrayList();
+    ChatService server;
     public ChatClient() throws RemoteException{
         start();
     }
@@ -31,13 +31,10 @@ public class ChatClient {
         System.out.println("client ready, searching for server...");
     }
     public void sendMessage(String msg) throws RemoteException{
-        ChatService server;
             try {
-                server = (ChatService) registry.lookup("server");
+                server = (ChatService)registry.lookup("server");
                 if (server != null) {
-                    server.send("\n"+msg);
-                    //messages=new ArrayList();
-                    messages=server.getAllMessages();
+                    server.send(msg);
                 }
             } catch (NotBoundException ex) {
                 System.out.println("still no server...");
@@ -45,7 +42,7 @@ public class ChatClient {
                 ex.printStackTrace();
             }
     }
-    public List<String> getAllMessages(){
-        return messages;
+    public List<String> getAllMessages() throws RemoteException{
+        return chat.getAllMessages();
     }
 }
