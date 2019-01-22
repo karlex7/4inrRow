@@ -5,6 +5,7 @@
  */
 package pkg4inrow;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -73,13 +74,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label timeLeftRed;
     @FXML
-    private Button btnSettings;
-    @FXML
-    private Button btnFastGame;
-    @FXML
-    private Button btnStandardGame;
-    @FXML
-    private Button btnSlowGame;
+    private Button btnChangeSettings;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -303,34 +298,13 @@ public class FXMLDocumentController implements Initializable {
         winnerOnce=true;
         printWinner(redMove);
     }
-
     @FXML
-    private void OnClickBtnSettings(ActionEvent event) {
+    private void OnClickChangeSettings(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
-            stage.show();
-        } catch (IOException ex) {
+            ThreadCounter.TIME=Integer.parseInt(settings.UcitajSettings());
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @FXML
-    private void OnClickBtnFastGame(ActionEvent event) {
-        
-        ThreadCounter.TIME=settings.GetFastTime();
-    }
-
-    @FXML
-    private void OnClickBtnStandardGame(ActionEvent event) {
-        ThreadCounter.TIME=settings.GetStandardTime();
-    }
-
-    @FXML
-    private void OnClickBtnSlowGame(ActionEvent event) {
-        ThreadCounter.TIME=settings.GetSlowTime();
     }
     
     

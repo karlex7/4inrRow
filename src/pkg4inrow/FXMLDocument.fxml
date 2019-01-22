@@ -10,7 +10,6 @@
 
 <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pkg4inrow.FXMLDocumentController">
    <children>
-      <Button fx:id="btnFastGame" layoutX="241.0" layoutY="688.0" mnemonicParsing="false" onAction="#OnClickBtnFastGame" text="Fast" />
       <GridPane fx:id="grid" gridLinesVisible="true" prefHeight="600.0" prefWidth="730.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
@@ -57,7 +56,6 @@
          <font>
             <Font size="18.0" />
          </font></Label>
-      <Button fx:id="btnStandardGame" layoutX="314.0" layoutY="688.0" mnemonicParsing="false" onAction="#OnClickBtnStandardGame" text="Standard" />
-      <Button fx:id="btnSlowGame" layoutX="408.0" layoutY="688.0" mnemonicParsing="false" onAction="#OnClickBtnSlowGame" text="Slow" />
+      <Button fx:id="btnChangeSettings" layoutX="295.0" layoutY="691.0" mnemonicParsing="false" onAction="#OnClickChangeSettings" text="Change settings" />
    </children>
 </Pane>
