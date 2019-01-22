@@ -6,6 +6,8 @@
 package pkg4inrow;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,6 +15,7 @@ import java.rmi.RemoteException;
  */
 public class ChatServiceImpl implements ChatService {
     private String name;
+    List<String> messages=new ArrayList();
     public ChatServiceImpl(String name) throws RemoteException{
         this.name=name;
     }
@@ -23,7 +26,14 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void send(String message) throws RemoteException {
-        System.out.println(name+" recived msg:"+message);
+        String temp=name+": "+message;
+        System.out.println(temp);
+        messages.add(temp);
+    }
+
+    @Override
+    public List<String> getAllMessages() throws RemoteException {
+        return messages;
     }
     
 }

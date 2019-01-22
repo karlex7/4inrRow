@@ -7,6 +7,7 @@ package pkg4inrow;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -15,4 +16,5 @@ import java.rmi.RemoteException;
 public interface ChatService extends Remote{
     String getName() throws RemoteException;
     void send(String message)throws RemoteException;
+    List<String> getAllMessages() throws RemoteException;
 }

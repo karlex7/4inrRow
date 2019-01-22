@@ -6,7 +6,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +20,7 @@ public class ChatServer {
     ChatServiceImpl server;
     Registry registry;
     ChatService stub;
+    List<String> messages;
     public ChatServer() throws RemoteException{
         start();
     }
@@ -35,12 +38,16 @@ public class ChatServer {
             try {
                 client = (ChatService) registry.lookup("client");
                 if (client != null) {
-                    client.send("hello from server on "  + new Date()+"\n"+msg);
+                    client.send("\n"+msg);
+                    messages=client.getAllMessages();
                 }
             } catch (NotBoundException ex) {
                 System.out.println("still no client...");
             } catch (AccessException ex) {
                 Logger.getLogger(ChatServer.class.getName()).log(Level.SEVERE, null, ex);
             }
+    }
+    public List<String> getAllMessages(){
+        return messages;
     }
 }
