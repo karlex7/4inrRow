@@ -16,7 +16,9 @@ import java.util.List;
 public class ChatServiceImpl implements ChatService {
     private String name;
     List<String> messages=new ArrayList();
-    public ChatServiceImpl(String name) throws RemoteException{
+    FXMLDocumentController con;
+    public ChatServiceImpl(String name,FXMLDocumentController Con) throws RemoteException{
+        con=Con;
         this.name=name;
     }
     @Override
@@ -30,6 +32,7 @@ public class ChatServiceImpl implements ChatService {
         String temp=message;
         System.out.println(temp);
         messages.add(temp);
+        con.setTextInTextArea(temp);
     }
 
     @Override

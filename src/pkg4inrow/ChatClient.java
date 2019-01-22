@@ -19,12 +19,14 @@ public class ChatClient {
     ChatService stub;
     List<String> messages=new ArrayList();
     ChatService server;
-    public ChatClient() throws RemoteException{
+    FXMLDocumentController con;
+    public ChatClient(FXMLDocumentController Con) throws RemoteException{
+        con=Con;
         start();
     }
     
     void start() throws RemoteException{
-        chat = new ChatServiceImpl("Klijent");
+        chat = new ChatServiceImpl("Klijent",con);
         registry = LocateRegistry.getRegistry();
         stub = (ChatService) UnicastRemoteObject.exportObject(chat, 0);
         registry.rebind("client", stub);

@@ -21,12 +21,14 @@ public class ChatServer {
     ChatService stub;
     List<String> messages=new ArrayList();
     ChatService client;
-    public ChatServer() throws RemoteException{
+    FXMLDocumentController con;
+    public ChatServer(FXMLDocumentController Con) throws RemoteException{
+        con=Con;
         start();
     }
     
     void start() throws RemoteException{
-        server = new ChatServiceImpl("Server");
+        server = new ChatServiceImpl("Server",con);
         registry = LocateRegistry.createRegistry(1099);
         // Registry registry = LocateRegistry.getRegistry();
         stub = (ChatService) UnicastRemoteObject.exportObject(server, 0);

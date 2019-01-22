@@ -326,11 +326,11 @@ public class FXMLDocumentController implements Initializable {
         Scanner in=new Scanner(System.in);
         int odabir=in.nextInt();
         if (odabir==1) {
-             server=new ChatServer();
+             server=new ChatServer(this);
              btnSendClient.setVisible(false);
              
         }else{
-            client=new ChatClient();
+            client=new ChatClient(this);
             btnSendServer.setVisible(false);
         }
     }
@@ -353,6 +353,9 @@ public class FXMLDocumentController implements Initializable {
         txtMessage.clear();
         client.sendMessage(msg);
         List<String> list=client.getAllMessages();
+    }
+    public void setTextInTextArea(String msg){
+        txtChatArea.setText(msg);
     }
     
     
