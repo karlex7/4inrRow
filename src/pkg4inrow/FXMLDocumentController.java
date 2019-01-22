@@ -6,26 +6,26 @@
 package pkg4inrow;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -33,7 +33,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.stage.Stage;
 
 /**
  *
@@ -43,7 +42,7 @@ public class FXMLDocumentController implements Initializable {
     private static final int TITLE_SIZE=100;
     private static final int COLUMNS=7;
     private static final int ROWS=6;
-    private static final int WIDTH=700;
+    private static final int WIDTH=1000;
     private static final int HEIGHT=750;
     private static boolean redMove=true;
     private int[] discGrid=new int[COLUMNS];//Tu stavljam kolko je popunjenih mjesta u redovima
@@ -55,6 +54,8 @@ public class FXMLDocumentController implements Initializable {
     private int moveCount=0;
     TimeCounter ThreadCounter=new TimeCounter(this);
     Settings settings=new Settings();
+    ChatServer server;
+    ChatClient client;
        
     @FXML
     private Pane pane;
@@ -75,9 +76,22 @@ public class FXMLDocumentController implements Initializable {
     private Label timeLeftRed;
     @FXML
     private Button btnChangeSettings;
+    @FXML
+    private TextArea txtChatArea;
+    @FXML
+    private TextField txtMessage;
+    @FXML
+    private Button btnSendServer;
+    @FXML
+    private Button btnSendClient;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            ServerOrClient();
+        } catch (RemoteException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         SetPane();
         NapuniDiscGrid();
         Draw();
@@ -305,6 +319,34 @@ public class FXMLDocumentController implements Initializable {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void ServerOrClient() throws RemoteException {
+        System.out.println("\n1. Server\n2. Klijent\n");
+        Scanner in=new Scanner(System.in);
+        int odabir=in.nextInt();
+        if (odabir==1) {
+             server=new ChatServer();
+             btnSendClient.setVisible(false);
+             
+        }else{
+            client=new ChatClient();
+            btnSendServer.setVisible(false);
+        }
+    }
+
+    @FXML
+    private void OnClickBtnSendServer(ActionEvent event) throws RemoteException {
+        String msg=txtMessage.getText();
+        txtMessage.clear();
+        server.sendMessage(msg);
+    }
+
+    @FXML
+    private void OnClickBtnSednClient(ActionEvent event) throws RemoteException {
+        String msg=txtMessage.getText();
+        txtMessage.clear();
+        client.sendMessage(msg);
     }
     
     

@@ -26,16 +26,12 @@ public class Settings {
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY,
 				"com.sun.jndi.fscontext.RefFSContextFactory");
-		env.put(Context.PROVIDER_URL, "file:C:/Users/Jarvis/Documents/College projects/4inrRow/Settings/");
+		env.put(Context.PROVIDER_URL, "file:C:/Users/Karlo/Documents/VUA projects/4inrRow/4inrRow/Settings/");
 
 		try {
-                    System.out.println("1 jos ne");
 			Context ctx = new InitialContext(env);
-                        System.out.println("2 ni tu");
 			Object obj = ctx.lookup(naziv);
-                        System.out.println("3 ni tu");
 			System.out.println(naziv + " je povezan sa : " + obj);
-                        
                         
                         Scanner file=new Scanner(new File(obj.toString()));
                         podatak=file.nextLine();
