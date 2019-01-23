@@ -63,5 +63,6 @@
       <TextField fx:id="txtMessage" layoutX="747.0" layoutY="622.0" prefHeight="25.0" prefWidth="226.0" />
       <Button fx:id="btnSendServer" layoutX="874.0" layoutY="656.0" mnemonicParsing="false" onAction="#OnClickBtnSendServer" prefHeight="25.0" prefWidth="99.0" text="Send" />
       <Button fx:id="btnSendClient" layoutX="747.0" layoutY="657.0" mnemonicParsing="false" onAction="#OnClickBtnSednClient" prefHeight="25.0" prefWidth="76.0" text="Send" />
+      <Button fx:id="btnReplay" layoutX="624.0" layoutY="703.0" mnemonicParsing="false" onAction="#OnClickBtnReplay" text="Replay" />
    </children>
 </Pane>

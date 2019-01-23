@@ -6,6 +6,7 @@
 package pkg4inrow;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -33,6 +34,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -56,7 +61,11 @@ public class FXMLDocumentController implements Initializable {
     Settings settings=new Settings();
     ChatServer server;
     ChatClient client;
-       
+    List<String> replay=new ArrayList();   
+    ReplayWrite Replay=new ReplayWrite();
+    boolean replayNeTraje=true;
+    
+    
     @FXML
     private Pane pane;
     @FXML
@@ -84,6 +93,8 @@ public class FXMLDocumentController implements Initializable {
     private Button btnSendServer;
     @FXML
     private Button btnSendClient;
+    @FXML
+    private Button btnReplay;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -140,7 +151,7 @@ public class FXMLDocumentController implements Initializable {
         
     }
 
-    private void placeDisc(int x) {
+    public void placeDisc(int x) {
         if (discGrid[x]>=0) {
             if (redMove) {
             Circle circle=new Circle((TITLE_SIZE/2));
@@ -162,6 +173,12 @@ public class FXMLDocumentController implements Initializable {
                 trenutniGame[x][discGrid[x]--]=2;
                 pauzirajT2();
                 }
+            
+            if (replayNeTraje) {
+                String kolona=""+x;
+                replay.add(kolona);
+            }
+        
         checkIfWinner(x,discGrid[x]);
         moveCount++;
         
@@ -237,10 +254,12 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void OnClickSave(ActionEvent event){
+    private void OnClickSave(ActionEvent event) throws XMLStreamException, ParserConfigurationException, TransformerException{
         //SERIJALIZACIJA
         Stanje s=new Stanje(trenutniGame,redMove,rPoints,yPoints);
         s.save(s);
+        Replay.loadPodaci(replay);
+        Replay.saveReplay();
     }
 
     @FXML
@@ -356,8 +375,20 @@ public class FXMLDocumentController implements Initializable {
         client.sendMessage(msg);
         List<String> list=client.getAllMessages();
     }
-    
-    
+
+    @FXML
+    private void OnClickBtnReplay(ActionEvent event) throws ParserConfigurationException, SAXException, IOException, InterruptedException{
+        //ReplayRead ReplayRead=new ReplayRead();
+        startReplay();
+    }
+    private void startReplay() throws InterruptedException{
+        ResetBoard();
+        replayNeTraje=false;
+        ThreadCounter.NotPause=false;
+        ReplayRead ReplayRead=new ReplayRead(replay,this);
+        replayNeTraje=true;
+        ThreadCounter.NotPause=true;
+    }
     
     
     }
