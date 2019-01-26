@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Replay>
   <Potez>
-    <Kolona>0</Kolona>
+    <Kolona>3</Kolona>
+  </Potez>
+  <Potez>
+    <Kolona>3</Kolona>
+  </Potez>
+  <Potez>
+    <Kolona>3</Kolona>
   </Potez>
   <Potez>
     <Kolona>3</Kolona>
@@ -10,15 +16,9 @@
     <Kolona>6</Kolona>
   </Potez>
   <Potez>
-    <Kolona>6</Kolona>
-  </Potez>
-  <Potez>
-    <Kolona>6</Kolona>
-  </Potez>
-  <Potez>
-    <Kolona>6</Kolona>
-  </Potez>
-  <Potez>
     <Kolona>5</Kolona>
+  </Potez>
+  <Potez>
+    <Kolona>0</Kolona>
   </Potez>
 </Replay>
