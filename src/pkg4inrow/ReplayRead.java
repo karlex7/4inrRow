@@ -74,15 +74,15 @@ public class ReplayRead implements Runnable{
                 Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            con.placeDisc(lista.get(i));
+                            try {
+                                con.placeDisc(lista.get(i));
+                            } catch (IOException ex) {
+                                Logger.getLogger(ReplayRead.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             i++;
                         }
                     });
                 Thread.sleep(1000);
-            }
-            for (int i = 0; i < lista.size(); i++) {
-                
-                
             }
         }catch(Exception e){
             

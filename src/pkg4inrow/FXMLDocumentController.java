@@ -64,6 +64,9 @@ public class FXMLDocumentController implements Initializable {
     List<String> replay=new ArrayList();   
     ReplayWrite Replay=new ReplayWrite();
     boolean replayNeTraje=true;
+    boolean serverOrClient;
+    SocketClient socketClient;
+    SocketServer socketServer;
     
     
     @FXML
@@ -102,6 +105,10 @@ public class FXMLDocumentController implements Initializable {
             ServerOrClient();
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
         SetPane();
         NapuniDiscGrid();
@@ -137,7 +144,11 @@ public class FXMLDocumentController implements Initializable {
             rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
-                    placeDisc(column);
+                    try {
+                        placeDisc(column);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
             list.add(rect);
@@ -151,8 +162,9 @@ public class FXMLDocumentController implements Initializable {
         
     }
 
-    public void placeDisc(int x) {
+    public void placeDisc(int x) throws IOException {
         if (discGrid[x]>=0) {
+            socketClient.sendRowFromClient(x);
             if (redMove) {
             Circle circle=new Circle((TITLE_SIZE/2));
                 circle.setCenterX(TITLE_SIZE/2);
@@ -340,17 +352,20 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    private void ServerOrClient() throws RemoteException {
+    private void ServerOrClient() throws RemoteException, IOException, ClassNotFoundException {
         System.out.println("\n1. Server\n2. Klijent\n");
         Scanner in=new Scanner(System.in);
         int odabir=in.nextInt();
         if (odabir==1) {
              server=new ChatServer(this);
              btnSendClient.setVisible(false);
-             
+             serverOrClient=true;
+             socketServer=new SocketServer(this);
         }else{
             client=new ChatClient(this);
             btnSendServer.setVisible(false);
+            serverOrClient=false;
+            socketClient=new SocketClient(this);
         }
     }
     public void setTextInTextArea(String msg){
@@ -388,6 +403,10 @@ public class FXMLDocumentController implements Initializable {
         ReplayRead ReplayRead=new ReplayRead(replay,this);
         replayNeTraje=true;
         ThreadCounter.NotPause=true;
+    }
+    public void placeDiskoFromOpponent(int row) throws IOException{
+        System.out.println(row);
+        placeDisc(row);
     }
     
     
