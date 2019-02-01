@@ -164,7 +164,6 @@ public class FXMLDocumentController implements Initializable {
 
     public void placeDisc(int x) throws IOException {
         if (discGrid[x]>=0) {
-            socketClient.sendRowFromClient(x);
             if (redMove) {
             Circle circle=new Circle((TITLE_SIZE/2));
                 circle.setCenterX(TITLE_SIZE/2);
