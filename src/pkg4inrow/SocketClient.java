@@ -4,27 +4,37 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  *
  * @author Karlo
  */
-public class SocketClient {
-    public SocketClient(FXMLDocumentController con) throws IOException, ClassNotFoundException{
-      new SocketClientConnection(con).start();
-    }
-}
-class SocketClientConnection extends Thread{
+class SocketClient implements Runnable{
     FXMLDocumentController controller;
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private Socket connection;
     int row;
     Thread t;
-    public SocketClientConnection(FXMLDocumentController con) throws IOException, ClassNotFoundException{
-        t=new Thread(this);
+    public SocketClient(FXMLDocumentController con) throws IOException, ClassNotFoundException{
         controller=con;
-        startRunning();
+        t=new Thread(this);
+        t.setDaemon(true);
+        t.start();
+    }
+    
+    @Override
+    public void run() {
+        try {
+            startRunning();
+        } catch (IOException ex) {
+            Logger.getLogger(SocketClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SocketClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void startRunning() throws IOException, ClassNotFoundException {
@@ -49,6 +59,16 @@ class SocketClientConnection extends Thread{
     private void whileChatting() throws IOException, ClassNotFoundException {
         do {
             row=(Integer)input.readObject();
+            Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                controller.placeDisc(row);
+                            } catch (IOException ex) {
+                                Logger.getLogger(SocketClient.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    });
             System.out.println("recived from server\nRow "+row);
         } while (true);
         
@@ -58,5 +78,7 @@ class SocketClientConnection extends Thread{
         output.flush();
         System.out.println("Client salje "+row);
     }
+
+    
     
 }
