@@ -19,6 +19,7 @@ class SocketClient implements Runnable{
     private Socket connection;
     int row;
     Thread t;
+    boolean turn=true;
     public SocketClient(FXMLDocumentController con) throws IOException, ClassNotFoundException{
         controller=con;
         t=new Thread(this);
@@ -59,7 +60,7 @@ class SocketClient implements Runnable{
     private void whileChatting() throws IOException, ClassNotFoundException {
         do {
             row=(Integer)input.readObject();
-            Platform.runLater(new Runnable() {
+                Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -70,6 +71,8 @@ class SocketClient implements Runnable{
                         }
                     });
             System.out.println("recived from server\nRow "+row);
+            
+            
         } while (true);
         
     }

@@ -146,6 +146,7 @@ public class FXMLDocumentController implements Initializable {
                 public void handle(MouseEvent e) {
                     try {
                         placeDisc(column);
+                        sendDisc(column);
                     } catch (IOException ex) {
                         Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -164,7 +165,6 @@ public class FXMLDocumentController implements Initializable {
 
     public void placeDisc(int x) throws IOException {
         if (discGrid[x]>=0) {
-            sendDisc(x);
             if (redMove) {
             Circle circle=new Circle((TITLE_SIZE/2));
                 circle.setCenterX(TITLE_SIZE/2);

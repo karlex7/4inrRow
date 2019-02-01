@@ -23,7 +23,7 @@ public class SocketServer implements Runnable{
     FXMLDocumentController controller;
     Thread t;
     int row;
-    boolean turn=true;
+    
     
     public SocketServer(FXMLDocumentController con) throws IOException, ClassNotFoundException{
         controller=con;
@@ -71,7 +71,6 @@ public class SocketServer implements Runnable{
         //tu mi se treba ucitati broj
         //int row;
         //sendRow(row);
-        
         do {
             //tu se treba staviti disk na grid
             row=(Integer)input.readObject();
@@ -80,7 +79,6 @@ public class SocketServer implements Runnable{
                         public void run() {
                             try {
                                 controller.placeDisc(row);
-                                turn=false;
                             } catch (IOException ex) {
                                 Logger.getLogger(SocketClient.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -96,7 +94,6 @@ public class SocketServer implements Runnable{
         output.writeObject(row);
         output.flush();
         System.out.println("Server salje "+row);
-        turn=false;
     }
 
     
